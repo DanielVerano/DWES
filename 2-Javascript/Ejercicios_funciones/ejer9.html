@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 9</title>
+</head>
+
+<body>
+    <script>
+        let num = parseInt(prompt('Introduce un número positivo de uno o dos dígitos'));
+        comprobarNumero(num);
+
+        function comprobarNumero(num) {
+            if (isNaN(num)) {
+                alert('El número introducido no es correcto');
+            } else {
+                let digitos = 0;
+
+                while (num > 1) {
+                    num = num / 10;
+                    digitos++;
+
+                    if (digitos > 2) {
+                        alert('El número introducido no es correcto');
+                        return;
+                    }
+                }
+                alert('El número introducido es correcto y tiene ' + digitos + ' digitos');
+            }
+        }
+    </script>
+</body>
+
+</html>

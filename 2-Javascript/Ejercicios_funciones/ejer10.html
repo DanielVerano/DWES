@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 10</title>
+</head>
+
+<body>
+    <script>
+        let numero = parseInt(prompt('Introduce un número entero positivo de hasta tres cifras'));
+
+        if (isNaN(numero) || numero < 0) {
+            alert('El número introducido no es correcto');
+        } else {
+            let cifras = calcularCifras(numero);
+
+            if (cifras > 3) {
+                alert('El número introducido tiene más de 3 cifras');
+            } else {
+                alert(`El número introducido tiene ${cifras} cifras`);
+            }
+        }
+
+        function calcularCifras(numero) {
+            let cifras = 0;
+
+            while (numero >= 1) {
+                numero = numero / 10;
+                cifras++;
+            }
+
+            return cifras;
+        }
+    </script>
+</body>
+
+</html>

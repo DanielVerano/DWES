@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 18</title>
+</head>
+
+<body>
+    <script>
+        let sueldo = parseInt(prompt('Introduce su sueldo'));
+        let antiguedad = parseInt(prompt('Introduce sus años de antigüedad'));
+
+        alert(`Su nuevo sueldo es ${calcularSueldo(sueldo, antiguedad)}`);
+
+        function calcularSueldo(sueldo, antiguedad) {
+            let nuevoSueldo = sueldo;
+
+            if (sueldo < 1000 && antiguedad >= 10) {
+                nuevoSueldo = sueldo * 1.2;
+            } else if (sueldo < 1000 && antiguedad < 10) {
+                nuevoSueldo = sueldo * 1.05;
+            }
+            return nuevoSueldo;
+        }
+    </script>
+</body>
+
+</html>

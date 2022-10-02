@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 19</title>
+</head>
+
+<body>
+    <script>
+        let mes = prompt('Introduce el mes');
+        let anio = parseInt(prompt('Introduce el año'));
+
+        let numDias = {
+            'enero': 30,
+            'febrero': 28,
+            'marzo': 31,
+            'abril': 30,
+            'mayo': 31,
+            'junio': 30,
+            'julio': 31,
+            'agosto': 31,
+            'septiembre': 30,
+            'octubre': 31,
+            'noviembre': 30,
+            'diciembre': 31
+        };
+
+        if (mes === 'febrero' && esBisiesto(anio)) {
+            alert(`${mes} de ${anio} tiene ${numDias[mes] + 1} dias`);
+        } else {
+            alert(`${mes} de ${anio} tiene ${numDias[mes]} dias`);
+        }
+
+        function esBisiesto(anio) {
+            return anio % 4 == 0 || (anio % 100 == 0 && anio % 400 == 0);
+        }
+    </script>
+</body>
+
+</html>

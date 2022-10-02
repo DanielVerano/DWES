@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 14</title>
+</head>
+
+<body>
+    <script>
+        let numeroNoPrimos = 0;
+
+        for (let i = 1; i <= 200; i++) {
+            if (i % 5 == 0) console.log(i);
+            if (!esPrimo(i)) numeroNoPrimos++;
+        }
+
+        console.log(`Número de números no primos: ${numeroNoPrimos}`);
+
+        function esPrimo(numero) {
+            for (let i = 2; i < numero; i++) {
+                if (numero % i == 0) return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>

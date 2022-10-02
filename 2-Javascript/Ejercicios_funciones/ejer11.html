@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 11</title>
+</head>
+
+<body>
+    <script>
+        let dia = parseInt(prompt('Introduce un día'));
+        let mes = parseInt(prompt('Introduce el número de un mes'));
+        let anio = parseInt(prompt('Introduce un año'));
+
+        let fecha = new Date(anio, mes - 1, dia);
+
+        if (esNavidad(fecha)) alert('Es navidad!');
+
+        function esNavidad(fecha) {
+            // Comprobar si la fecha es 25 de diciembre
+            return fecha.getDate() == 25 && fecha.getMonth() == 11;
+        }
+    </script>
+</body>
+
+</html>

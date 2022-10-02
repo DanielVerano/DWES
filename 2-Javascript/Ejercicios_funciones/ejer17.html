@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 17</title>
+</head>
+
+<body>
+    <script>
+        let nombre = prompt('Introduce su nombre');
+        let numPreguntas = parseInt(prompt('Introduce el número de preguntas realizadas'));
+        let preguntasCorrectas = parseInt(prompt('Introduce el número de preguntas contestadas correctamente'));
+
+        let nivel = calcularNivel(numPreguntas, preguntasCorrectas);
+        alert(`Su nivel es ${nivel}`);
+
+        function calcularNivel(numPreguntas, preguntasCorrectas) {
+            let porcentaje = preguntasCorrectas / numPreguntas;
+            let nivel;
+
+            if (porcentaje >= 0.9) {
+                nivel = 'superior';
+            } else if (porcentaje >= 0.75) {
+                nivel = 'medio';
+            } else if (porcentaje >= 0.50) {
+                nivel = 'bajo';
+            } else {
+                nivel = 'fuera de nivel';
+            }
+            return nivel;
+        }
+    </script>
+</body>
+
+</html>

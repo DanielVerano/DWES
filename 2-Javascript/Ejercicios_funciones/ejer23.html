@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 23</title>
+</head>
+
+<body>
+    <script>
+        let base_imponible = parseInt(prompt('Introduce la base imponible'));
+        let tipo_iva = parseInt(prompt('Introduce el tipo de IVA (21% o 10%)'));
+        let peso = parseInt(prompt('Introduce el peso del producto (en kg)'));
+
+        let total = calcularPrecio(base_imponible, tipo_iva, peso);
+        alert(`El precio total del producto es ${total}`);
+
+        function calcularPrecio(base, iva, peso) {
+            let precio;
+            let cuotaIva = base * iva / 100;
+            let gastosEnvio;
+
+            if (peso < 1) {
+                gastosEnvio = 3;
+            } else if (peso < 3) {
+                gastosEnvio = 5;
+            } else {
+                gastosEnvio = 10;
+            }
+
+            precio = base + cuotaIva + gastosEnvio;
+            return precio;
+        }
+    </script>
+</body>
+
+</html>

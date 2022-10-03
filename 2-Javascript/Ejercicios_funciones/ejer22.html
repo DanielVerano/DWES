@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 22</title>
+</head>
+
+<body>
+    <script>
+        let altura = parseInt(prompt('Introduce su altura (en cm)'));
+        let edad = parseInt(prompt('Introduce su edad'));
+        let sexo = prompt('Introduce su sexo (hombre o mujer)');
+        let pesoIdeal;
+
+        if (sexo === 'hombre') {
+            pesoIdeal = 50 + ((altura - 150) / 4) * 3 + (edad - 20) / 4;
+        } else if (sexo === 'mujer') {
+            pesoIdeal = (50 + ((altura - 150) / 4) * 3 + (edad - 20) / 4) * 0.9;
+        }
+        alert(`Su peso ideal es ${pesoIdeal}`);
+    </script>
+</body>
+
+</html>

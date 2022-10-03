@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 24</title>
+</head>
+
+<body>
+    <script>
+        let saldoActual = 50;
+        iniciarJuego();
+
+        function iniciarJuego() {
+            let error;
+            let numeroApostado;
+            let saldoApostado;
+
+            do {
+                error = false;
+                numeroApostado = parseInt(prompt('Introduce el número a apostar (del 1 al 6)'));
+
+                if (!comprobarNumero(numeroApostado)) {
+                    alert('El número introducido es incorrecto');
+                    error = true;
+                }
+            } while (error == true);
+
+            do {
+                error = false;
+                saldoApostado = parseInt(prompt(`Introduce el saldo a apostar (saldo disponible: ${saldoActual})`));
+
+                if (!comprobarSaldo(saldoActual, saldoApostado)) {
+                    alert('El saldo a apostar no puede ser mayor al saldo actual');
+                    error = true;
+                }
+            } while (error == true);
+
+            let numeroAleatorio = Math.round(Math.random() * 5 + 1);
+
+            if (numeroAleatorio == numeroApostado) {
+                saldoActual = (saldoActual - saldoApostado) + saldoApostado * 2;
+                alert(`Has ganado la ronda (tu saldo es ${saldoActual}); Nuḿero aleatorio: ${numeroAleatorio}`);
+            } else {
+                saldoActual = saldoActual - saldoApostado;
+                alert(`Has perdido la ronda (tu saldo es ${saldoActual}); Nuḿero aleatorio: ${numeroAleatorio}`);
+            }
+
+            if (saldoActual <= 0) {
+                alert('Has perdido el juego');
+            } else if (saldoActual >= 200) {
+                alert('Has ganado el juego');
+            } else {
+                iniciarJuego();
+            }
+        }
+
+        function comprobarNumero(numero) {
+            return numero >= 1 && numero <= 6;
+        }
+
+        function comprobarSaldo(saldoActual, saldoApostado) {
+            return saldoApostado > 0 && saldoApostado <= saldoActual;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 25</title>
+</head>
+
+<body>
+    <input type="text" id="cadena" placeholder="Introduce una cadena">
+    <input type="button" value="Aceptar" onclick="mostrarInformacion()">
+    <script>
+        function mostrarInformacion() {
+            let cadena = document.getElementById('cadena').value;
+
+            let arr = cadena.split(' ');
+            let numPalabras = 0;
+            let primeraPalabra, ultimaPalabra;
+
+            for (let i = 0; i < arr.length; i++) {
+                numPalabras++;
+                if (i == 0) primeraPalabra = arr[i];
+                if (i == arr.length - 1) ultimaPalabra = arr[i];
+            }
+
+            alert(`Número de palabras: ${numPalabras}, Primera palabra: ${primeraPalabra}, Última palabra: ${ultimaPalabra}`);
+        }
+    </script>
+</body>
+
+</html>

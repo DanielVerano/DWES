@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 26</title>
+</head>
+
+<body>
+    <p>Introduce los enteros separados por comas</p>
+    <input type="text" name="" id="numeros">
+    <input type="button" value="Cargar ejemplo" onclick="cargarEjemplo()">
+    <div>
+        <p>
+            <input type="button" value="Calcular" onclick="calcular()">
+            <input type="button" value="Reiniciar">
+        </p>
+    </div>
+    <div>La suma es: <span id="suma"></span></div>
+    <div>La media es: <span id="media"></span></div>
+    <div>El mayor es: <span id="mayor"></span></div>
+    <div>El menor es: <span id="menor"></span></div>
+    <script>
+        function cargarEjemplo() {
+            document.getElementById('numeros').value = '63,45,58,56';
+        }
+
+        function calcular() {
+            let numeros = document.getElementById('numeros').value;
+            let arr = numeros.split(',').map(valor => parseInt(valor));
+
+            let suma = 0;
+            let media = 0;
+            let mayor = arr[0];
+            let menor = arr[0];
+
+            for (const valor of arr) {
+                suma += valor;
+                if (valor > mayor) mayor = valor;
+                if (valor < menor) menor = valor;
+            }
+            media = suma / arr.length;
+
+            document.getElementById('suma').innerHTML = suma;
+            document.getElementById('media').innerHTML = media;
+            document.getElementById('mayor').innerHTML = mayor;
+            document.getElementById('menor').innerHTML = menor;
+        }
+    </script>
+</body>
+
+</html>

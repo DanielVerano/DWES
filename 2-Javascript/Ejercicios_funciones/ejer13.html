@@ -11,10 +11,14 @@
 <body>
     <script>
         let cadena = 'ejemplo';
+        let mensaje = '';
 
         for (const key in cadena) {
-            console.log(`Índice: ${key}, Valor: ${cadena[key]}`);
+            mensaje += `Índice: ${key}, Valor: ${cadena[key]}\n`;
         }
+
+        // Podemos observar que al recorrer una cadena con forin, la clave (key) hace referencia al índice de cada letra y su valor es la letra en sí.
+        alert(mensaje);
     </script>
 </body>
 

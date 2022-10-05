@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 28</title>
+</head>
+
+<body>
+    <script>
+        let dia = parseInt(prompt('Introduce su día de nacimiento'));
+        let mes = prompt('Introduce su mes de nacimiento');
+
+        let signo = calcularSignoZodiaco(dia, mes);
+        if (signo != null) {
+            alert(`Su signo del zodiaco es ${signo}`);
+        } else {
+            alert('Algunos de los datos introducidos no son correctos');
+        }
+
+        function calcularSignoZodiaco(dia, mes) {
+            let signo;
+
+            if (dia < 0 || dia > 31) {
+                signo = null;
+                return;
+            }
+
+            if ((mes === 'enero' && dia >= 21) || (mes === 'febrero' && dia <= 19)) {
+                signo = 'acuario';
+            } else if ((mes === 'febrero' && dia >= 20) || (mes === 'marzo' && dia <= 20)) {
+                signo = 'piscis';
+            } else if ((mes === 'marzo' && dia >= 21) || (mes === 'abril' && dia <= 20)) {
+                signo = 'aries';
+            } else if ((mes === 'abril' && dia >= 21) || (mes === 'mayo' && dia <= 20)) {
+                signo = 'tauro';
+            } else if ((mes === 'mayo' && dia >= 21) || (mes === 'junio' && dia <= 21)) {
+                signo = 'geminis';
+            } else if ((mes === 'junio' && dia >= 22) || (mes === 'julio' && dia <= 21)) {
+                signo = 'cancer';
+            } else if ((mes === 'julio' && dia >= 22) || (mes === 'agosto' && dia <= 22)) {
+                signo = 'leo';
+            } else if ((mes === 'agosto' && dia >= 23) || (mes === 'septiembre' && dia <= 22)) {
+                signo = 'virgo';
+            } else if ((mes === 'septiembre' && dia >= 23) || (mes === 'octubre' && dia <= 22)) {
+                signo = 'libra';
+            } else if ((mes === 'octubre' && dia >= 23) || (mes === 'noviembre' && dia <= 22)) {
+                signo = 'escorpio';
+            } else if ((mes === 'noviembre' && dia >= 23) || (mes === 'diciembre' && dia <= 21)) {
+                signo = 'sagitario';
+            } else if ((mes === 'diciembre' && dia >= 22) || (mes === 'enero' && dia <= 20)) {
+                signo = 'capricornio';
+            } else {
+                signo = null;
+            }
+            return signo;
+        }
+    </script>
+</body>
+
+</html>

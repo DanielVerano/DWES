@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 27</title>
+</head>
+
+<body>
+    <script>
+        let cadena = prompt('Introduce una cadena de texto');
+        contarLetras(cadena);
+
+        function contarLetras(cadena) {
+            let letras = {};
+
+            for (const letra of cadena) {
+                if (letras[letra]) {
+                    letras[letra]++;
+                } else {
+                    letras[letra] = 1;
+                }
+            }
+
+            let mensaje = '';
+
+            for (const key in letras) {
+                mensaje += `La letra ${key} aparece ${letras[key]} veces\n`;
+            }
+            alert(mensaje);
+        }
+    </script>
+</body>
+
+</html>

@@ -15,7 +15,7 @@
     <div>
         <p>
             <input type="button" value="Calcular" onclick="calcular()">
-            <input type="button" value="Reiniciar">
+            <input type="button" value="Reiniciar" onclick="reiniciar()">
         </p>
     </div>
     <div>La suma es: <span id="suma"></span></div>
@@ -47,6 +47,14 @@
             document.getElementById('media').innerHTML = media;
             document.getElementById('mayor').innerHTML = mayor;
             document.getElementById('menor').innerHTML = menor;
+        }
+
+        function reiniciar() {
+            document.getElementById('numeros').value = '';
+            document.getElementById('suma').innerHTML = 0;
+            document.getElementById('media').innerHTML = 0;
+            document.getElementById('mayor').innerHTML = 0;
+            document.getElementById('menor').innerHTML = 0;
         }
     </script>
 </body>

@@ -33,7 +33,7 @@
                 saldoApostado = parseInt(prompt(`Introduce el saldo a apostar (saldo disponible: ${saldoActual})`));
 
                 if (!comprobarSaldo(saldoActual, saldoApostado)) {
-                    alert('El saldo a apostar no puede ser mayor al saldo actual');
+                    alert('El saldo a apostar no puede ser cero o mayor al saldo actual');
                     error = true;
                 }
             } while (error == true);
@@ -42,10 +42,10 @@
 
             if (numeroAleatorio == numeroApostado) {
                 saldoActual = (saldoActual - saldoApostado) + saldoApostado * 2;
-                alert(`Has ganado la ronda (tu saldo es ${saldoActual}); Nuḿero aleatorio: ${numeroAleatorio}`);
+                alert(`Has ganado la ronda (tu saldo es ${saldoActual})\nNuḿero aleatorio: ${numeroAleatorio}`);
             } else {
                 saldoActual = saldoActual - saldoApostado;
-                alert(`Has perdido la ronda (tu saldo es ${saldoActual}); Nuḿero aleatorio: ${numeroAleatorio}`);
+                alert(`Has perdido la ronda (tu saldo es ${saldoActual})\nNuḿero aleatorio: ${numeroAleatorio}`);
             }
 
             if (saldoActual <= 0) {

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4</title>
+    <link rel="stylesheet" href="./estilos.css">
+    <style>
+        .col-50 {
+            float: left;
+            width: 50%;
+        }
+
+        #num_correcto {
+            color: green;
+        }
+
+        #recargar {
+            padding: 0.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" name="formulario" onsubmit="return validarDatos()">
+        <fieldset>
+            <legend>Registro de bolsa</legend>
+            <div class="row">
+                <div class="col-25"><label for="fecha">Fecha de creación</label></div>
+                <div class="col-75"><input type="text" id="fecha" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="cocinero">Cocinero</label></div>
+                <div class="col-75"><input type="text" id="cocinero" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="destinatario">Destinatario</label></div>
+                <div class="col-75"><input type="text" id="destinatario" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="gramos">Gramos</label></div>
+                <div class="col-75"><input type="number" id="gramos" min="100" max="5000" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="composicion">Composición</label></div>
+                <div class="col-75"><input type="text" id="composicion" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="num_cuenta">Número de cuenta bancaria</label></div>
+                <div class="col-75">
+                    <div class="col-50"><input type="text" id="num_cuenta" onchange="numeroCuentaEsValida(this)"
+                            required></div>
+                    <div class="col-50"><input type="text" id="num_correcto" disabled></div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit">Enviar</button>
+                <input type="button" value="Recargar datos" id="recargar" onclick="recargarDatos()">
+            </div>
+        </fieldset>
+    </form>
+    <script src="./ejer4.js"></script>
+</body>
+
+</html>

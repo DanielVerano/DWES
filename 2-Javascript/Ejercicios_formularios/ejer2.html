@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2</title>
+    <link rel="stylesheet" href="./estilos.css">
+</head>
+
+<body>
+    <form action="" name="formulario">
+        <fieldset>
+            <legend>Registro</legend>
+            <div class="row">
+                <div class="col-25"><label for="nombre">Escribe tu nombre:</label></div>
+                <div class="col-75"><input type="text" id="nombre" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="apellidos">Escribe tus apellidos:</label></div>
+                <div class="col-75"><input type="text" id="apellidos" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="email">Escribe tu Email:</label></div>
+                <div class="col-75"><input type="email" id="email" placeholder="example@example.com" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="web">Web personal:</label></div>
+                <div class="col-75"><input type="text" id="web" placeholder="https://example.com" required></div>
+            </div>
+            <div class="row">
+                <button type="submit" onclick="enviarDatos()">Enviar</button>
+            </div>
+        </fieldset>
+    </form>
+    <script src="./ejer2.js"></script>
+</body>
+
+</html>

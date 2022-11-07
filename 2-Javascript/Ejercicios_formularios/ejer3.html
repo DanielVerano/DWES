@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 3</title>
+    <link rel="stylesheet" href="./estilos.css">
+    <style>
+        #recargar {
+            padding: 0.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" name="formulario" onsubmit="return validarDatos()">
+        <fieldset>
+            <legend>Registro</legend>
+            <div class="row">
+                <div class="col-25"><label for="dni">DNI</label></div>
+                <div class="col-75"><input type="text" id="dni" placeholder="12.345.678-Z" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="nombre_completo">Nombre completo</label></div>
+                <div class="col-75"><input type="text" id="nombre_completo" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="fecha_nac">Fecha de nacimiento</label></div>
+                <div class="col-75"><input type="text" id="fecha_nac" placeholder="dd/mm/yyyy" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="email">Email</label></div>
+                <div class="col-75"><input type="email" id="email" placeholder="example@example.com" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="web">Web</label></div>
+                <div class="col-75"><input type="text" id="web" placeholder="http://example.com" required></div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label for="contrasena">Contraseña</label></div>
+                <div class="col-75"><input type="password" id="contrasena" placeholder="Entre 8 y 10 caracteres"
+                        required></div>
+            </div>
+            <div class="row">
+                <button type="submit">Enviar</button>
+                <input type="button" value="Recargar datos" id="recargar" onclick="recargarDatos()">
+            </div>
+        </fieldset>
+    </form>
+    <script src="./ejer3.js"></script>
+</body>
+
+</html>

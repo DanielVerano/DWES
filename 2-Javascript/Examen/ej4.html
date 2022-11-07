@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4</title>
+</head>
+
+<body>
+    <form action="" onsubmit="return comprobarDatos()">
+        <div>
+            <label for="dni">DNI:</label>
+            <input type="text" name="dni" id="dni" placeholder="99.999.999X" required>
+        </div>
+        <div>
+            <label for="nombre">Nombre completo:</label>
+            <input type="text" name="nombre" id="nombre" required>
+        </div>
+        <div>
+            <label for="fecha">Fecha de cita:</label>
+            <input type="text" name="fecha" id="fecha" placeholder="dd-mm-yyyy" required>
+        </div>
+        <div>
+            <label for="hora">Hora de cita:</label>
+            <input type="time" name="hora" id="hora" required>
+        </div>
+        <div>
+            <span>Medio de confirmación de la cita (puede elegir uno o ambos):</span>
+            <div>
+                <label for="movil">Móvil:</label>
+                <input type="text" name="movil" id="movil" placeholder="+34 600 600 600">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" name="email" id="email" placeholder="example@example.com">
+            </div>
+        </div>
+        <div>
+            <button type="submit">Enviar formulario</button>
+        </div>
+    </form>
+    <script src="./ej4.js"></script>
+</body>
+
+</html>

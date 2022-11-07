@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1</title>
+</head>
+
+<body>
+    <h2>Ejercicio 1</h2>
+    <label for="plato">Elija un plato (6€):</label>
+    <select name="plato" id="plato">
+        <option value="Plato_1">Plato N1</option>
+        <option value="Plato_2">Plato N2</option>
+        <option value="Plato_3">Plato N3</option>
+        <option value="Plato_4">Plato N4</option>
+        <option value="Plato_5">Plato N5</option>
+    </select>
+    <div>
+        <label for="extras">Elija un complemento o extra opcional (1€ por complemento):</label>
+    </div>
+    <div><input type="checkbox" name="entrante" id="entrante">Entrante</div>
+    <div><input type="checkbox" name="bebida" id="bebida">Bebida</div>
+    <div><input type="checkbox" name="postre" id="postre">Postre</div>
+    <div>
+        <label for="vip">¿Es usted VIP? (5% de descuento)</label>
+        <input type="radio" name="vip" id="vipSi" value="si">Sí
+        <input type="radio" name="vip" id="vipNo" value="no">No
+    </div>
+    <div>
+        <input type="button" value="Hacer pedido" onclick="hacerPedido()">
+    </div>
+    <script src="./ej1.js"></script>
+</body>
+
+</html>

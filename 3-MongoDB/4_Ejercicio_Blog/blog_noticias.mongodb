@@ -1,0 +1,265 @@
+
+// Realizar el diseño que se crea más conveniente y explicar por qué se ha elegido
+// embebido o referenciado en cada relación.
+
+// He elegido crear dos colecciones, una para los usuarios y otra para las noticias, donde en cada noticia se hace referencia al usuario que ha escrito esa noticia cogiendo sus campos 'nombre_usuario' y 'cuenta_twitter'.
+// Como el nombre de usuario y la cuenta de twitter son datos que no van a cambiar, tiene más sentido embeber estos datos en cada noticia, ya que el tamaño de éstos no es muy grande y podemos acceder a ellos más fácilmente.
+// Por otro lado, una noticia puede tener o no el campo 'tags', y los comentarios de cada noticia se almacenarán en la propia noticia en un array de comentarios.
+
+// Crear los siguientes índices:
+// Creación de los siguientes índices sobre usuario.
+// 1. Índice único para los campos nombre_usuario y cuenta_twitter.
+db.usuarios.createIndex({nombre_usuario: 1, cuenta_twitter: 1}, {unique: true});
+
+// 2. Índice para el campo cp (código postal), hay que tener en cuenta que el campo no es requerido.
+db.usuarios.createIndex({"direccion.cp": 1}, {sparse: true});
+
+// 3. Varios índices para los teléfonos (tantos como campos haya).
+db.usuarios.createIndex({telefonos: 1});
+
+// Creación de índice sobre noticia para facilitar las consultas requeridas (más frecuentes según enunciado).
+db.noticias.createIndex({fecha: 1});
+
+
+// Insertar los datos:
+
+use('blog_noticias');
+
+db.usuarios.insertMany([
+    {
+        nombre_usuario: 'Frank_blog',
+        nombre: 'Frank',
+        cuenta_twitter: 'Frank_USE',
+        descripcion: 'blogger aficionado',
+        telefonos: ['713128989','840932834'],
+        direccion: {
+            calle: 'Av. de los Castros',
+            numero: '2256',
+            cp: '39005',
+            ciudad: 'Santander'
+        }
+    },
+    {
+        nombre_usuario: 'Peter_blog',
+        nombre: 'Peter',
+        cuenta_twitter: 'Pete',
+        descripcion: 'blogger aficionado',
+        telefonos: ['808080808','432342432'],
+        direccion: {
+            calle: 'Av. de los Rios',
+            numero: '289',
+            cp: '38015',
+            ciudad: 'Santander'
+        }
+    },
+    {
+        nombre_usuario: 'Frank_blog',
+        nombre: 'Frank',
+        cuenta_twitter: 'Frank_USA',
+        descripcion: 'blogger aficionado',
+        telefonos: ['713128989','111111111'],
+        direccion: {
+            calle: 'Av. de los Castros',
+            numero: '2256',
+            cp: '39005',
+            ciudad: 'Santander'
+        }
+    }
+])
+
+// Insertar varias noticias (al menos, 10 documentos) con diferentes valores en los campos y
+// que, al menos, 3 documentos tengan varios valores en el array de tags, y otros que no
+// tengan valor en este campo.
+
+db.noticias.insertMany([
+    {
+        titulo: 'Noticia 1',
+        cuerpo: 'Cuerpo de noticia 1',
+        fecha: '2022-11-06',
+        tags: ['lorem', 'ipsum', 'dolor', 'sit'],
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USE'
+        }
+    },
+    {
+        titulo: 'Noticia 2',
+        cuerpo: 'Cuerpo de noticia 2',
+        fecha: '2022-10-05',
+        tags: ['donec', 'quam', 'felis'],
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USE'
+        }
+    },
+    {
+        titulo: 'Noticia 3',
+        cuerpo: 'Cuerpo de noticia 3',
+        fecha: '2022-09-04',
+        tags: ['nullam', 'dictum', 'mollis', 'pretium'],
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USE'
+        }
+    },
+    {
+        titulo: 'Noticia 4',
+        cuerpo: 'Cuerpo de noticia 4',
+        fecha: '2022-04-04',
+        tags: ['natus', 'omnis', 'error'],
+        usuario: {
+            nombre_usuario: 'Peter_blog',
+            cuenta_twitter: 'Pete'
+        }
+    },
+    {
+        titulo: 'Noticia 5',
+        cuerpo: 'Cuerpo de noticia 5',
+        fecha: '2022-07-07',
+        usuario: {
+            nombre_usuario: 'Peter_blog',
+            cuenta_twitter: 'Pete'
+        }
+    },
+    {
+        titulo: 'Noticia 6',
+        cuerpo: 'Cuerpo de noticia 6',
+        fecha: '2022-06-06',
+        usuario: {
+            nombre_usuario: 'Peter_blog',
+            cuenta_twitter: 'Pete'
+        }
+    },
+    {
+        titulo: 'Noticia 7',
+        cuerpo: 'Cuerpo de noticia 7',
+        fecha: '2021-05-04',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USA'
+        }
+    },
+    {
+        titulo: 'Noticia 8',
+        cuerpo: 'Cuerpo de noticia 8',
+        fecha: '2021-05-06',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USA'
+        }
+    },
+    {
+        titulo: 'Noticia 9',
+        cuerpo: 'Cuerpo de noticia 9',
+        fecha: '2021-07-06',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USA'
+        }
+    },
+    {
+        titulo: 'Noticia 10',
+        cuerpo: 'Cuerpo de noticia 10',
+        fecha: '2021-03-02',
+        tags: ['Li', 'Europan', 'lingues'],
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USA'
+        }
+    }
+])
+
+
+// Realizar las siguientes consultas frecuentes sobre la BD
+
+// 1. Consulta de los datos del usuario por nombre de usuario y por cuenta de Twitter, ordenado por código postal.
+db.usuarios.find({}, {nombre_usuario: 1, cuenta_twitter: 1}).sort({"direccion.cp": 1})
+
+// 2. Consulta las noticias ordenadas por fecha (de más reciente a más antigua), 
+// muestra solo las 5 últimas noticias publicadas.
+db.noticias.find({}).sort({fecha: -1}).limit(5)
+
+// 3. Noticias que no tienen el campo tag.
+db.noticias.find({tags: {$exists: false}})
+
+// 4. Noticias publicadas en un periodo de fechas. ¿Se podrían realizar consultas por año,
+// mes y día sobre el campo de tipo ISOdate?. Si se puede, haz la consulta.
+// Sí, se podría hacer utilizando los operadores $gt y $lt. Por ejemplo, para saber las noticias a partir del 01/01/2022:
+db.noticias.find({fecha: {$gt: ISODate("2022-01-01T00:00:00.000Z")}})
+db.noticias.find({fecha: {$lt: ISODate("2022-01-01T00:00:00.000Z")}})
+
+// Ampliar la base de datos para almacenar los datos de los comentarios que los usuarios
+// pueden dejar sobre las noticias, según la especificación indicada anteriormente.
+
+//  Inserta 6 comentarios: un par de comentarios de distintos usuarios sobre tres noticias distintas.
+
+db.noticias.updateOne({titulo: 'Noticia 1'}, {$push: { comentarios: { $each: [
+    {
+        fecha: ISODate("2022-11-07T10:14:23Z"),
+        cuerpo: 'Hola',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USE'
+        }
+    },
+    {
+        fecha: ISODate("2022-11-07T11:42:03Z"),
+        cuerpo: 'Adios',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USE'
+        }
+    }
+]}}})
+
+db.noticias.updateOne({titulo: 'Noticia 2'}, { $push: { comentarios: { $each: [
+    {
+        fecha: ISODate("2022-10-08T15:34:06Z"),
+        cuerpo: 'Bien',
+        usuario: {
+            nombre_usuario: 'Peter_blog',
+            cuenta_twitter: 'Pete'
+        }
+    },
+    {
+        fecha: ISODate("2022-10-09T17:48:53Z"),
+        cuerpo: 'Mal',
+        usuario: {
+            nombre_usuario: 'Peter_blog',
+            cuenta_twitter: 'Pete'
+        }
+    }
+]}}})
+
+db.noticias.updateOne({titulo: 'Noticia 3'}, { $push: { comentarios: { $each: [
+    {
+        fecha: ISODate("2022-09-05T21:12:24Z"),
+        cuerpo: 'Estoy de acuerdo',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USA'
+        }
+    },
+    {
+        fecha: ISODate("2022-09-06T23:17:49Z"),
+        cuerpo: 'Me parece interesante',
+        usuario: {
+            nombre_usuario: 'Frank_blog',
+            cuenta_twitter: 'Frank_USA'
+        }
+    }
+]}}})
+
+// ¿Definirías algún índice?
+
+// Crearía un índice para la consulta de noticias en una fecha determinada, de esta manera:
+db.noticias.createIndex({fecha: 1})
+
+// Consulta los comentarios, muestra del último comentario (el más actual), el título y fecha de
+// publicación de la noticia y el nombre del usuario y cuenta de twitter.
+
+db.noticias.aggregate([
+    { $unwind: "$comentarios" },
+    { $sort: { "comentarios.fecha": -1 } },
+    { $project: { titulo: 1, fecha: 1, usuario: 1 }}
+])

@@ -1,0 +1,100 @@
+db.productos.insertMany([
+  {
+    _id: ObjectId("635977b168710297c8c9b406"),
+    referencia: 'P0001',
+    tipo: 'chaqueta',
+    paraHombre: true,
+    talla: 'M',
+    precio: 20.99,
+    paraMujer: false,
+    proveedor: { nombre: 'Camiseros SA', nif: 'B12345678', contacto: 'Jose' },
+    tienda: [ 'Jerez', 'Sevilla', 'Cordoba' ]
+  },
+  {
+    _id: ObjectId("635977b168710297c8c9b407"),
+    referencia: 'P0002',
+    tipo: 'chaqueta',
+    paraHombre: true,
+    talla: 'M',
+    precio: 30.25,
+    paraMujer: false,
+    proveedor: { nombre: 'Camiseros SA', nif: 'B12345678', contacto: 'Juan' },
+    tienda: [ 'Jerez', 'Chucena', 'Cordoba' ]
+  },
+  {
+    _id: ObjectId("635977b168710297c8c9b408"),
+    referencia: 'P0003',
+    tipo: 'pantalon',
+    paraMujer: true,
+    talla: 'L',
+    precio: 20.99,
+    paraHombre: false,
+    proveedor: { nombre: 'Pantaloneros SA', nif: 'B87654321', contacto: 'Jose' },
+    tienda: [ 'Rota', 'Sevilla' ]
+  }
+])
+
+// ¿Cómo modificarías el diseño de la BD para guardar la siguiente información?
+
+// ● P0001, stock en tienda: [“Jerez”:32, “Sevilla”:12, “Cordoba”:8]
+// ● P0002, stock en tienda: [“Jerez”:9, “Chucena”:5, “Cordoba”:12]
+// ● P0003, stock en tienda: [“Rota”:9, “Sevilla”:15]
+
+// Haz las modificaciones necesarias sobre la BD retail.
+
+// Crearía otra colección llamada tiendas, donde cada documento tendría dos propiedades: 
+    // La primera propiedad almacenaría el nombre de la tienda.
+    // La segunda propiedad almacenaría todos los productos que tiene esa tienda en un array, llamado inventario.
+// Por lo tanto, la inserción de datos se haría de la siguiente manera:
+
+db.tiendas.insertMany([
+    {
+        tienda: "Jerez", 
+        inventario: [
+            {producto: "P0001", stock: 32}, 
+            {producto: "P0002", stock:  9}  
+        ]
+    }, 
+    {
+        tienda: "Sevilla", 
+        inventario: [
+            {producto: "P0001", stock: 12}, 
+            {producto: "P0003", stock: 15}  
+        ]
+    }, 
+    {
+        tienda: "Cordoba", 
+        inventario: [
+            {producto: "P0001", stock:  8}, 
+            {producto: "P0002", stock: 12}  
+        ]
+    }, 
+    {
+        tienda: "Rota", 
+        inventario: [ {producto: "P0003", stock: 9} ]
+    }
+])
+
+// Por ejemplo, para actualizar el stock del producto P0003 en la tienda de Rota, se haría de la siguiente manera:
+
+db.tiendas.updateOne({tienda: "Rota", "inventario.producto": "P0003"}, {$set: {"inventario.$.stock": 10}})
+
+// Una vez modificado el diseño de la BD retail qué índices crearías, suponiendo que el
+// volumen de productos es muy grande, con consultas muy frecuentes sobre producto y talla,
+// así como una actualización continua del stock (recepción diaria por tienda y ventas durante todo el día).
+
+// Crea los índices necesarios sobre la BD retail.
+
+// Crearía un índice compuesto para el tipo de producto y la talla, ya que son consultas muy frecuentes. El índice sería:
+
+db.productos.createIndex({tipo: 1, talla: 1})
+
+// También crearía otro índice único para que las tiendas no se puedan repetir, tal que así:
+
+db.tiendas.createIndex({tienda: 1},{unique: true})
+
+// Explicar también el por qué crear ese índice, usando explain()
+
+db.productos.find({tipo: '', talla: ''}).explain("executionStats")
+
+// Generalmente, crear los índices sobre los campos con menores datos

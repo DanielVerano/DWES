@@ -1,0 +1,136 @@
+use cine;
+
+// Insertar los siguientes documentos en una colección llamada peliculas.
+
+db.peliculas.insertMany([
+    {
+        titulo: "Fight Club",
+        director: "Chuck Palahniuk",
+        anio: 1999,
+        actores: [
+            "Brad Pitt",
+            "Edward Norton"
+        ]
+    },
+    {
+        titulo: "Pulp Fiction",
+        director: "Quentin Tarantino",
+        anio: 1994,
+        actores: [
+            "John Travolta",
+            "Uma Thurman"
+        ]
+    },
+    {
+        titulo: "Inglorious Basterds",
+        director: "Quentin Tarantino",
+        anio: 2009,
+        actores: [
+            "Brad Pitt",
+            "Diane Kruger",
+            "Eli Roth"
+        ]
+    },
+    {
+        titulo: "The Hobbit: An Unexpected Journey",
+        director: "J.R.R. Tolkien",
+        anio: 2012,
+        saga: "The Hobbit"
+    },
+    {
+        titulo : "The Hobbit: The Desolation of Smaug",
+        director : "J.R.R. Tolkien",
+        anio : 2013,
+        saga : "The Hobbit"
+    },
+    {
+        titulo : "The Hobbit: The Battle of the Five Armies",
+        director : "J.R.R. Tolkien",
+        anio : 2012,
+        saga : "The Hobbit",
+        sinopsis : "Bilbo and Company are forced to engage in a war against an array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness."
+    },
+    {
+        titulo : "Pee Wee Herman's Big Adventure"
+    },
+    {
+        titulo: "Avatar"
+    }
+])
+
+// 1. Obtener todos los documentos y mostrar solo el título y año.
+
+db.peliculas.find({}, {titulo: 1, anio: 1, _id: 0})
+
+// 2. Obtener documentos con director igual a "Quentin Tarantino", mostrar titulo y actores.
+
+db.peliculas.find({director: "Quentin Tarantino"}, {titulo: 1, actores: 1, _id: 0})
+
+// 3. Obtener documentos con actores que incluyan a "Brad Pitt", mostrar título, año y director.
+
+db.peliculas.find({actores: {$all: ["Brad Pitt"]}}, {titulo: 1, anio: 1, director: 1, _id:0})
+
+// 4. Obtener documentos con saga igual a "The Hobbit", mostrar título y sinopsis.
+
+db.peliculas.find({saga: "The Hobbit"}, {titulo: 1, sinopsis:1, _id:0})
+
+// 5. Obtener todas las películas de los 90s, ordenada de más reciente a menos y muestra el titulo y año.
+
+db.peliculas.find({$and: [ {anio: {$gte: 1990}}, {anio: {$lte: 1999}} ]}, {titulo: 1, anio:1, _id:0}).sort({anio: -1})
+
+// 6.  Obtener las películas estrenadas entre el año 2000 y 2010, ordenadas alfabéticamente por el título y muestra titulo, director y saga.
+
+db.peliculas.find({$and: [{anio: {$gte: 2000}}, {anio: {$lte: 2010}}]}, {titulo: 1, director: 1, saga: 1, _id: 0}).sort({titulo: 1})
+
+
+// -------- Actualizar documentos -----------
+
+// 1. Agregar sinopsis a "The Hobbit: An Unexpected Journey" : "A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug."
+
+db.peliculas.updateOne({titulo: "The Hobbit: An Unexpected Journey"}, {
+    $set: {sinopsis: "A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug."}
+})
+
+// 2. Agregar sinopsis a "The Hobbit: The Desolation of Smaug" : "The dwarves, along with Bilbo Baggins and Gandalf the Grey, continue their quest to reclaim Erebor, their homeland, from Smaug. Bilbo Baggins is in possession of a mysterious and magical ring."
+
+db.peliculas.updateOne({titulo: "The Hobbit: The Desolation of Smaug"}, {
+    $set: {sinopsis: "The dwarves, along with Bilbo Baggins and Gandalf the Grey, continue their quest to reclaim Erebor, their homeland, from Smaug. Bilbo Baggins is in possession of a mysterious and magical ring."}
+})
+
+// 3. Agregar una actor llamado "Samuel L. Jackson" a la película "Pulp Fiction".
+
+db.peliculas.updateOne({titulo: "Pulp Fiction"}, {$push: {actores: "Samuel L. Jackson"}})
+
+
+// -------------- Busqueda por texto / Text Search ----------------
+
+// 1. Encontrar las películas que en la sinopsis contengan la palabra "Bilbo".
+
+db.peliculas.find({sinopsis: /Bilbo/})
+
+// 2. Encontrar las películas que en la sinopsis contengan la palabra "Gandalf".
+
+db.peliculas.find({sinopsis: /Gandalf/})
+
+// 3. Encontrar las películas que en la sinopsis contengan la palabra "Bilbo" y no la palabra "Gandalf".
+
+db.peliculas.find({$and: [ {sinopsis: /Bilbo/}, {sinopsis: { $not: /Gandalf/}}]})
+
+// 4. Encontrar las películas que en la sinopsis contengan la palabra "dwarves" ó "hobbit".
+
+db.peliculas.find({$or: [ {sinopsis: /dwarves/ }, {sinopsis: /hobbit/ }]})
+
+// 5. Encontrar las películas que en la sinopsis contengan la palabra "gold" y "dragon".
+
+db.peliculas.find({$and: [ {sinopsis: /gold/ }, {sinopsis: /dragon/ }]})
+
+
+// ------------- Eliminar documentos ------------------
+
+// 1. Eliminar la película "Pee Wee Herman's Big Adventure".
+
+db.peliculas.deleteOne({titulo: "Pee Wee Herman's Big Adventure"})
+
+// 2. Eliminar la película "Avatar".
+
+db.peliculas.deleteOne({titulo: "Avatar"})

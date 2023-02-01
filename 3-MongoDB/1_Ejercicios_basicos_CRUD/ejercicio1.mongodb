@@ -1,0 +1,11 @@
+//  Actualiza cada documento, filtrando por sus referencia. Las propiedades cambiando
+// el tipo camisa por chaqueta y la talla debe ser igual a M.
+use('Retail');
+
+db.productos.updateMany({
+    tipo: "camisa"
+}, {
+    $set: {
+        tipo: "chaqueta", talla: "M"
+    }
+})

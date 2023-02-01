@@ -1,0 +1,11 @@
+use('Retail');
+
+db.productos.find({
+  tienda: {
+    $in: ["Jerez"]
+  }
+}, {
+  referencia: 1,
+  talla: 1,
+  _id: 0
+})

@@ -1,0 +1,130 @@
+// Ejemplo de $lookup referenciando al usuario en la noticia
+
+use('blog_noticias2');
+
+db.usuarios.insertMany([
+    {
+        nombre_usuario: 'Frank_blog',
+        nombre: 'Frank',
+        cuenta_twitter: 'Frank_USE',
+        descripcion: 'blogger aficionado',
+        telefonos: ['713128989','840932834'],
+        direccion: {
+            calle: 'Av. de los Castros',
+            numero: '2256',
+            cp: '39005',
+            ciudad: 'Santander'
+        }
+    },
+    {
+        nombre_usuario: 'Peter_blog',
+        nombre: 'Peter',
+        cuenta_twitter: 'Pete',
+        descripcion: 'blogger aficionado',
+        telefonos: ['808080808','432342432'],
+        direccion: {
+            calle: 'Av. de los Rios',
+            numero: '289',
+            cp: '38015',
+            ciudad: 'Santander'
+        }
+    },
+    {
+        nombre_usuario: 'Frank_blog',
+        nombre: 'Frank',
+        cuenta_twitter: 'Frank_USA',
+        descripcion: 'blogger aficionado',
+        telefonos: ['713128989','111111111'],
+        direccion: {
+            calle: 'Av. de los Castros',
+            numero: '2256',
+            cp: '39005',
+            ciudad: 'Santander'
+        }
+    }
+])
+
+// {
+//     '0': ObjectId("6373ba7a6743990d833c5324"),
+//     '1': ObjectId("6373ba7a6743990d833c5325"),
+//     '2': ObjectId("6373ba7a6743990d833c5326")
+// }
+
+db.noticias.insertMany([
+    {
+        titulo: 'Noticia 1',
+        cuerpo: 'Cuerpo de noticia 1',
+        fecha: '2022-11-06',
+        tags: ['lorem', 'ipsum', 'dolor', 'sit'],
+        usuarioId: ObjectId("6373ba7a6743990d833c5324")
+    },
+    {
+        titulo: 'Noticia 2',
+        cuerpo: 'Cuerpo de noticia 2',
+        fecha: '2022-10-05',
+        tags: ['donec', 'quam', 'felis'],
+        usuarioId: ObjectId("6373ba7a6743990d833c5324")
+    },
+    {
+        titulo: 'Noticia 3',
+        cuerpo: 'Cuerpo de noticia 3',
+        fecha: '2022-09-04',
+        tags: ['nullam', 'dictum', 'mollis', 'pretium'],
+        usuarioId: ObjectId("6373ba7a6743990d833c5324")
+    },
+    {
+        titulo: 'Noticia 4',
+        cuerpo: 'Cuerpo de noticia 4',
+        fecha: '2022-04-04',
+        tags: ['natus', 'omnis', 'error'],
+        usuarioId: ObjectId("6373ba7a6743990d833c5325")
+    },
+    {
+        titulo: 'Noticia 5',
+        cuerpo: 'Cuerpo de noticia 5',
+        fecha: '2022-07-07',
+        usuarioId: ObjectId("6373ba7a6743990d833c5325")
+    },
+    {
+        titulo: 'Noticia 6',
+        cuerpo: 'Cuerpo de noticia 6',
+        fecha: '2022-06-06',
+        usuarioId: ObjectId("6373ba7a6743990d833c5325")
+    },
+    {
+        titulo: 'Noticia 7',
+        cuerpo: 'Cuerpo de noticia 7',
+        fecha: '2021-05-04',
+        usuarioId: ObjectId("6373ba7a6743990d833c5326")
+    },
+    {
+        titulo: 'Noticia 8',
+        cuerpo: 'Cuerpo de noticia 8',
+        fecha: '2021-05-06',
+        usuarioId: ObjectId("6373ba7a6743990d833c5326")
+    },
+    {
+        titulo: 'Noticia 9',
+        cuerpo: 'Cuerpo de noticia 9',
+        fecha: '2021-07-06',
+        usuarioId: ObjectId("6373ba7a6743990d833c5326")
+    },
+    {
+        titulo: 'Noticia 10',
+        cuerpo: 'Cuerpo de noticia 10',
+        fecha: '2021-03-02',
+        tags: ['Li', 'Europan', 'lingues'],
+        usuarioId: ObjectId("6373ba7a6743990d833c5326")
+    }
+])
+
+// Project fields from lookup result
+db.noticias.aggregate([
+    { $lookup: {
+      from: "usuarios",
+      localField: "usuarioId",
+      foreignField: "_id",
+      as: "usuario"
+    }},
+    { $project: {usuario: {nombre_usuario: 1}}}
+])

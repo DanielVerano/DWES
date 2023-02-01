@@ -1,0 +1,267 @@
+use('universidad');
+
+db.profesores.insertMany([
+    {
+        "nombre": "María", 
+        "apellidos": "Suárez Manrique", 
+        "especialidad": ["biología"], 
+        "esTitular": true, 
+        "esAsociado": false, 
+        "edad": 51
+    }, 
+    {
+        "nombre": "Jose Luis", 
+        "apellidos": "López Pérez", 
+        "especialidad": ["matemáticas", "física"], 
+        "esTitular": false, 
+        "esAsociado": true, 
+        "edad": 39
+    }, 
+    {
+        "nombre": "Antonio", 
+        "apellidos": "Munguía Arteche", 
+        "especialidad": ["física", "química"], 
+        "esTitular": true, 
+        "esAsociado": false, 
+        "edad": 54
+    }
+])
+
+// 1ra consulta
+db.profesores.find()
+
+// 2da consulta
+db.profesores.find(
+    {esAsociado: true}
+)
+
+// 3ra consulta
+db.profesores.find(
+  {$and:[{esTitular: true},{edad: {$gt:50}}]}
+)
+
+// 4ta consulta
+db.profesores.find(
+    {
+        $and: [
+            {edad: {$gt:50}},
+            {edad: {$lt:60}}
+        ]
+    }
+)
+
+// 5ta consulta
+db.profesores.find().count()
+
+// 6ta consulta
+db.profesores.find(
+    {esAsociado: true}
+).count()
+
+// 7ta consulta
+db.profesores.find({}).limit(2)
+
+// 8va consulta: Obtener todos los profesores con especialidad física o biología.
+db.profesores.find(
+    {especialidad: {
+        $in: ["física", "biología"]
+    }}
+)
+
+// 9na consulta: Obtener todos los profesores con especialidad biología o que sea asociado.
+db.profesores.find(
+    {
+        $or: [ 
+            {
+            especialidad: {
+                $in: ["biología"]
+                }
+            },
+            {
+            esAsociado: true
+            }
+        ]
+    }
+)
+
+// 10 consulta: Obtener todos los profesores que imparten exáctamente matemáticas y física
+// (exactamente en ese orden).
+db.profesores.find({
+    especialidad: ["matemáticas", "física"]
+})
+
+// 11 consulta: Obtener todos los profesores que imparten matemáticas y física (sin orden).
+db.profesores.find({
+    especialidad: {
+        $all: ["matemáticas", "física"]
+    }
+})
+
+// 12 consulta: Número total de profesores que imparten biología.
+db.profesores.find({
+    especialidad: {
+        $in: ["biología"]
+    }
+}).count()
+
+// 13 Actualiza la colección Profesores con los datos de las asignaturas que imparten.
+db.profesores.updateOne({nombre: "María"}, {
+    $set: {
+        asignatura: {
+            id: "A0001",
+            nombre: "Biología molecular",
+            creditos: 6
+}}})
+
+db.profesores.updateOne({nombre: "Jose Luis"}, {
+    $set: {
+        asignatura: {
+            id: "A0002",
+            nombre: "Termodinámica",
+            creditos: 9
+}}})
+
+db.profesores.updateOne({nombre: "Antonio"}, {
+    $set: {
+        asignatura: {
+            id: "A0002",
+            nombre: "Termodinámica",
+            creditos: 9
+}}})
+
+// 16 consulta: Obtener todos los profesores que imparten la asignatura A0002.
+db.profesores.find({
+    "asignatura.id": "A0002"
+})
+
+// 17 consulta: Obtener todos los profesores que imparten termodinámica.
+db.profesores.find({
+    "asignatura.nombre": "Termodinámica"
+})
+
+// 18 consulta: Obtener todos los profesores que den asignaturas de más de 6 créditos.
+db.profesores.find({
+    "asignatura.creditos": {$gt: 6}
+})
+
+// 19 consulta: Obtener todos los que den asignaturas de más de 6 créditos y mayores de 40.
+db.profesores.find({
+    $and: [
+        {
+            "asignatura.creditos": {$gt: 6}
+        },
+        {
+            edad: {$gt: 40}
+        }
+    ]
+})
+
+// 20 Añadir propiedades (vehículo) y registros a la colección Profesores.
+db.profesores.updateOne({nombre: "María"}, {
+    $set: {
+        vehiculo: { 
+            matricula: "1111ABC",
+            tipo: "SUV",
+            marca: "Lexus", 
+            caballos: 190, 
+            uso: 3
+            }
+    }
+})
+
+db.profesores.updateOne({nombre: "Jose Luis"}, {
+    $set: {
+        vehiculo: { 
+            matricula: "2222DEF",
+            tipo: "SUV",
+            marca: "Toyota", 
+            caballos: 120,
+            uso: 13
+            }
+    }
+})
+
+db.profesores.updateOne({nombre: "Antonio"}, {
+    $set: {
+        vehiculo: { 
+            matricula: "3333HIJ",
+            tipo: "turismo",
+            marca: "Volvo", 
+            caballos: 176,
+            uso: 6
+            }
+    }
+})
+
+db.profesores.insertOne({ 
+    nombre: "Fernando", 
+    apellidos: "Delgado De La Fuente", 
+    especialidad: [ "física" ],
+    esTitular: false, 
+    esAsociado: true, 
+    vehiculo: { 
+        matricula: "4444KLM", 
+        tipo: "moto",
+        marca: "Yamaha", 
+        caballos: 75, 
+        uso: 8 } 
+})
+
+db.profesores.insertOne({ 
+    nombre: "Elena", 
+    apellidos: "Hérnandez Serafín", 
+    especialidad: [ "matemáticas", "física" ], 
+    esTitular: true, 
+    esAsociado: false, 
+    vehiculo: { 
+        matricula: "5555NOP",
+        tipo: "moto", 
+        marca: "honda", 
+        caballos: 170, 
+        uso: 4 } 
+})
+
+// 23 consulta: Obtener todos los profesores que tienen un SUV.
+db.profesores.find({
+    "vehiculo.tipo": "SUV"
+})
+
+// 24 consulta: Obtener todos los profesores que tienen una moto y un uso de menos de 5 años.
+db.profesores.find({
+    $and: [{
+        "vehiculo.tipo": "moto"
+    },
+    {
+        "vehiculo.uso": {$lt: 5}
+    }]
+})
+
+// 25 consulta: Obtener todos los profesores con vehículo de más de 150 caballos y que impartan física.
+db.profesores.find({
+    $and: [{
+        "vehiculo.caballos": {$gt: 150}
+    },
+    {
+        especialidad: {
+            $in: ["física"]
+        }
+    }]
+})
+
+// 26 consulta: Obtener el nº de profesores con más de 50 años, que tienen moto.
+db.profesores.find({
+    $and: [{
+        edad: {$gt: 50}
+    },
+    {
+        "vehiculo.tipo": "moto"
+    }]
+}).count()
+
+// 27 consulta: Obtener el nº de profesores titulares que tienen un SUV.
+db.profesores.find({
+    $and: [
+        {"vehiculo.tipo": "SUV"},
+        {esTitular: true}
+    ]
+}).count()

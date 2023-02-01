@@ -1,0 +1,149 @@
+use('inventario');
+
+// Crea una BD inventario con la siguiente colección:
+
+db.productos.insertMany([
+    {
+        sku: "000001",
+        genero: "camisa",
+        talla: "L",
+        precio: 100,
+        existencia: [
+            {
+                tienda: "SE",
+                cantidad: 8
+            },
+            {
+                tienda: "CA",
+                cantidad: 12
+            }
+        ],
+        tipo: "hombre"
+    },
+    {
+        sku: "000011",
+        genero: "camisa",
+        talla: "M",
+        precio: 50,
+        existencia: [
+            {
+                tienda: "SE",
+                cantidad: 15
+            },
+            {
+                tienda: "CA",
+                cantidad: 10
+            }
+        ],
+        tipo: "mujer"
+    },
+    {
+        sku: "000002",
+        genero: "traje",
+        talla: "M",
+        precio: 450,
+        existencia: [
+            {
+                tienda: "SE",
+                cantidad: 5
+            },
+            {
+                tienda: "CA",
+                cantidad: 15
+            }
+        ],
+        tipo: "mujer"
+    },
+    {
+        sku: "000009",
+        genero: "pantalon",
+        talla: "L",
+        precio: 50,
+        existencia: [
+            {
+                tienda: "SE",
+                cantidad: 100
+            },
+            {
+                tienda: "CA",
+                cantidad: 50
+            }
+        ],
+        tipo: "hombre"
+    }
+])
+
+// 1. Abrimos una nueva tienda “CO”, donde solo se va a vender ropa de hombre y va a comenzar con un
+// stock (cantidad) de cada producto de 10 prendas. Actualiza la BD.
+
+db.productos.updateMany({tipo: "hombre"}, {$push: {existencia: {tienda: "CO", cantidad: 10}}})
+
+// 2. Consulta la información de los dos productos de menor precio, muestra el sku, género y precio.
+
+db.productos.find({}, {_id:0, sku:1, genero:1, precio:1}).sort({precio:1}).limit(2)
+
+// 3. Mostrar los datos sku y precio de todos los productos que no se venden en la tienda “CO” o cuyo
+// precio sea superior a 50, ordenados por precio descendente.
+
+db.productos.find({$or:[
+    {"existencia.tienda": {$not: {$eq: "CO"}}},
+    {precio: {$gt: 50}}
+] }, {_id:0, sku:1, precio:1}).sort({precio:-1})
+
+// 4. Mostrar los datos sku, genero, talla y tipo de aquellos productos que tengan un stock inferior a 10
+// prendas en alguna tienda y su precio sea mayor de 100, ordenados por talla y sku.
+
+db.productos.find({$and: [
+    {"existencia.cantidad": {$lt: 10}},
+    {precio: {$gt: 100}}
+]}, {_id:0, sku:1, genero:1, talla:1, tipo:1}).sort({talla:1, sku:1})
+
+// Diseño
+// 5. Añadir en la BD los datos sobre las ventas (tienda, sku, cantidad y fecha) qué diseño elegirías?
+// razónalo y modifica la BD con un ejemplo.
+
+db.ventas.insertOne(
+    {
+        sku: "000001",
+        tienda: "SE",
+        cantidad: 2,
+        fecha: ISODate()
+    }
+)
+
+// Índices
+// 6. Qué índices crearías, suponiendo que el volumen de productos es muy grande (999999), Crea los
+// índices en la BD y razona el motivo por el que has creado cada uno de ellos.
+// ¿Cómo comprobarías si ha mejorado el rendimiento de la BD?.
+
+db.productos.createIndex({"existencia.cantidad":1})
+
+db.productos.find({"existencia.cantidad": {$gt:10}}).explain("executionStats")
+
+// Agregaciones
+// 7. Cuántos productos hay por tipo, su precio máximo y mínimo.
+
+db.productos.aggregate([
+    { $group: {_id: "$tipo", suma: {$sum: 1}, maximo: {$max: "$precio"}, minimo: {$min: "$precio"}}}
+])
+
+// 8. Cuántos productos hay de cada género y su precio medio.
+
+db.productos.aggregate([
+    { $group: {_id: "$genero", media: {$avg: "$precio"}}}
+])
+
+// 9. Muestra el stock total existente (entre todas las tiendas) de cada producto.
+
+db.productos.aggregate([
+    { $unwind: "$existencia"},
+    { $group: {_id: "$sku", total: {$sum: "$existencia.cantidad"}}}
+])
+
+// 10. Visualización, de mayor a menor por tienda y producto, de la valoración de las existencias.
+
+db.productos.aggregate([
+    { $unwind: "$existencia"},
+    { $group: {_id: {tienda: "$existencia.tienda", producto: "$sku"}, stock: {$sum: "$existencia.cantidad"}}},
+    { $sort: {"_id.tienda":-1, "_id.producto": -1}}
+])

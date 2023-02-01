@@ -1,0 +1,129 @@
+use('competicion');
+
+db.pruebas.insertMany([
+    {nombre: "Carlos", mes: "Marzo", distKm:  6, tiempoMin:  42}, 
+    {nombre: "Elena" , mes: "Marzo", distKm: 10, tiempoMin:  60}, 
+    {nombre: "Carlos", mes: "Marzo", distKm:  2, tiempoMin:  12}, 
+    {nombre: "Elena" , mes: "Marzo", distKm: 10, tiempoMin:  61}, 
+    {nombre: "Carlos", mes: "Abril", distKm:  5, tiempoMin:  33}, 
+    {nombre: "Elena" , mes: "Abril", distKm: 42, tiempoMin: 285}, 
+    {nombre: "Angel" , mes: "Marzo", distKm:  5, tiempoMin:  33}  
+])
+
+// 1. Calcular el número de pruebas que ha realizado cada corredor.
+
+db.pruebas.aggregate([
+    { $group: { _id: "$nombre", suma: {$sum: 1} } }
+])
+
+// 2. Calcular el número de pruebas que ha realizado cada corredor por mes.
+
+db.pruebas.aggregate([
+    { $group: { _id: { mes: "$mes", nombre: "$nombre" }, suma: { $sum: 1 } } }
+])
+
+// 3. Calcular el número total de Kms recorridos por cada corredor.
+
+db.pruebas.aggregate([
+    { $group: { _id: "$nombre", totalKms: { $sum: "$distKm" } } }
+])
+
+// 4. Calcular los kilómetros que corre cada uno de media al mes.
+
+db.pruebas.aggregate([
+    { $group: { _id: { persona: "$nombre", mes: "$mes" }, totalKms: { $sum: "$distKm"} } },
+    { $group: { _id: "$_id.persona", media: { $avg: "$totalKms"}}}
+])
+
+// 5. Visualizar las distintas distancias que ha corrido cada corredor en las pruebas.
+
+db.pruebas.aggregate([
+  { $group: { _id: "$nombre", distancias: { $addToSet: "$distKm" } } }
+])
+
+// 6. Calcular el número medio de pruebas por corredor al mes (se cuenta el número de
+// pruebas por persona y mes y a continuación se hace la media de este dato)
+// Idea:
+// - Sabemos contar el número de pruebas por mes.
+// - Sabemos hacer la media de unos valores
+// ¡usemos 2 etapas!
+
+db.pruebas.aggregate([
+  { $group: { _id: {persona: "$nombre", mes: "$mes"}, totalPruebas: {$sum:1}}},
+  { $group: { _id: "$_id.persona", media: {$avg: "$totalPruebas"}}}
+])
+
+// 7. Visualizar en cada mes qué distancias se han hecho en alguna sesión. (Si una
+// distancia se ha corrido varias veces en ese mes debe aparecer varias veces).
+
+db.pruebas.aggregate([
+  { $group: {_id: "$mes", distancias: {$push: "$distKm"}}}
+])
+
+// 8. Obtener la mayor y menor distancia recorrida por cada corredor.
+
+db.pruebas.aggregate([
+  { $group: {_id: "$nombre", mayorDistancia: {$max: "$distKm"}, menorDistancia: {$min: "$distKm"}}}
+])
+
+// 9. Queremos disponer de los datos de distancias recorridas en millas, sabiendo que
+// una milla = 1,60934 km.
+
+db.pruebas.aggregate([
+    { $project: { _id: 0, distKm: 1, millas: { $divide: ["$distKm", 1.60934] } } }
+])
+
+// 10. Obtener la media en kilómetros mensuales de cada corredor, pero solo para aquellos
+// valores medios que sean superiores a 5km.
+
+db.pruebas.aggregate([
+  { $group: { _id: {persona: "$nombre", mes: "$mes"}, totalKms: { $sum: "$distKm"}}},
+  { $group: { _id: "$_id.persona", mediaKms: { $avg: "$totalKms"}}},
+  { $match: { mediaKms: {$gt: 5}}}
+])
+
+// 11. Calcular la media de kilómetros por corredor y mes, ordenado por mes.
+
+db.pruebas.aggregate([
+  { $group: { _id: { persona: "$nombre", mes: "$mes"}, mediaKms: { $avg: "$distKm"}}},
+  { $sort: { "_id.mes": 1}}
+])
+
+// 12. Mostrar el corredor que tiene mayor media absoluta.
+
+db.pruebas.aggregate([
+  { $group: { _id: "$nombre", media: { $avg: "$distKm"} } },
+  { $sort: { media: -1} },
+  { $limit: 1 }
+])
+
+// 13. Calcula la media de pruebas realizadas por cada persona mensualmente.
+// Idea:Redirige la salida de una agrupación creando una nueva colección. No muestra
+// nada en la salida, pero puedes comprobarlo haciendo un find sobre la nueva
+// colección de salida.
+
+db.pruebas.aggregate([
+  { $group: { _id: {persona: "$nombre", mes: "$mes"}, totalPruebas: { $sum: 1} } },
+  { $group: { _id: "$_id.persona", mediaPruebas: { $avg: "$totalPruebas"} } },
+  { $out: "pruebas2" }
+])
+
+// 14. Creamos una nueva colección en la BD llamada gustos, con los siguientes datos:
+
+db.gustos.insertMany([
+    {nombre:"Carlos", aficiones:["siesta","cine"]},
+    {nombre:"Elena", aficiones:["correr","cine"]},
+    {nombre:"Ana", aficiones:["viajar","cine"]},
+    {nombre:"Angel", aficiones:["correr","montaña", "cine"]}
+])
+
+// 15. Queremos saber el número de personas con el que cuenta cada afición.
+// Idea:Cuando tenemos documentos que contienen un array y queremos agrupar por
+// valores del array, a veces conviene eliminar los arrays y convertirlos en múltiples
+// documentos. En realidad estamos "normalizando" (primera forma normal). Y agrupar
+// sobre esos documentos.
+
+db.gustos.aggregate([
+  { $unwind: "$aficiones"},
+  { $group: { _id: "$aficiones", total: { $sum: 1} } }
+])

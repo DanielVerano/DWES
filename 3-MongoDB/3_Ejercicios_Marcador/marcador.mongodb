@@ -1,0 +1,105 @@
+use('marcador');
+
+db.puntuaciones.insertOne({ _id: 1, usuario : "pepegrillo", puntos : 50, finalizado : true })
+db.puntuaciones.insertOne({ _id: 2, usuario : "pablito", puntos : 80, finalizado : false })
+db.puntuaciones.insertOne({ _id: 3, usuario : "paulina", puntos : 30 })
+
+// 1. Listar todos los documentos de la colección, que la salida se muestre estructurada para facilitar la lectura.
+
+db.puntuaciones.find()
+
+// 2. Listar alguno de los documentos de la colección, para mostrar la estructura de los documentos que contiene.
+
+db.puntuaciones.findOne()
+
+// 3. Listar los elementos por valor de sus atributos: filtrar por el nombre de usuario “pepegrillo”.
+
+db.puntuaciones.find({usuario: "pepegrillo"})
+
+// 4. Listar por rango de valores: en este caso documentos donde el puntos sea mayor que 20 y menor o igual a 50.
+
+db.puntuaciones.find({$and: [
+    {puntos: {$gt: 20}},
+    {puntos: {$lte: 50}}
+]})
+
+// 5. Listar elementos que no incluyen (o que incluyen) un atributo. En este caso listamos el documento que no tiene el atributo finalizado.
+
+db.puntuaciones.find({finalizado: {$exists: false}})
+
+// 6. Listar elementos usando expresiones regulares: cuyo usuario contenga la cadena uli.
+
+db.puntuaciones.find({usuario: /uli/ })
+
+// 7. Hacer una agrupación de condiciones, en este caso elementos cuyo _id sea 1 o 2.
+
+db.puntuaciones.find({$or: [
+    {_id: 1},
+    {_id: 2}
+]})
+
+// 8. Contar el número de documentos de la colección.
+
+db.puntuaciones.find().count()
+
+// 9. Contar el número de documentos de la colección con el filtro que esté finalizado.
+
+db.puntuaciones.find({finalizado: true}).count()
+
+
+db.puntuaciones.insertMany([
+    {
+        _id: 4,
+        usuario: "cocinero",
+        favoritos: ["cocinar", "postres"],
+        direccion: {
+        pais: "es", 
+        ciudad: "madrid"
+        }
+    },
+    {
+        _id: 5,
+        usuario: "deportista",
+        favoritos: ["running"],
+        direccion: {
+        pais: "es", 
+        ciudad: "toledo"
+        }
+    }
+])
+
+// 10. Consultar por coincidencias en un array: listamos los documentos que tengan como favoritos “postres”.
+
+db.puntuaciones.find({favoritos: {$all: ["postres"]}})
+
+// 11. Obtener los documentos que contengan en el array todos los elementos “postres” y “cocinar”.
+
+db.puntuaciones.find({favoritos: {$all: ["postres", "cocinar"]}})
+
+// 12. Listar los documentos que contengan en el array “cocinar”.
+
+db.puntuaciones.find({favoritos: {$all: ["cocinar"]}})
+
+// 13. Listando los elementos por valor de alguno de los atributos del documento embebido. En este caso, documentos cuya ciudad es madrid.
+
+db.puntuaciones.find({"direccion.ciudad": "madrid"})
+
+// 14. Obtener los usuarios con las dos mejores puntuaciones.
+
+db.puntuaciones.find({}).sort({puntos: -1}).limit(2)
+
+// 15. Ordenar los resultados por el valor de sus atributos. Para utilizar el orden natural, hay que utilizar el 1 positivo, y para invertir los resultados, un 1 negativo. Ordenar de mayor a menor puntuación.
+
+db.puntuaciones.find({}).sort({puntos: -1})
+
+// 16. Actualizar los puntos de pepegrillo a 60.
+
+db.puntuaciones.updateOne({usuario: "pepegrillo"}, {$set: {puntos: 60}})
+
+// 17. Incrementa las puntuaciones de pepegrillo en 1 punto.
+
+db.puntuaciones.updateOne({usuario: "pepegrillo"}, {$inc: {puntos: 1}})
+
+// 18. Actualización masiva de la propiedad finalizado (true) a todos los documentos.
+
+db.puntuaciones.updateMany({}, {$set: {finalizado: true}})

@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+}
+
+body {
+    width: 75%;
+    margin: 0 auto;
+}
+
+div {
+    text-align: center;
+}

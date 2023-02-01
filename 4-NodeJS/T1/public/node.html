@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <h1>NodeJS</h1>
+    <div><img src="./img/node-logo.png" alt="Node Logo" width="20%"></div>
+    <p><b>Node es un “ejecutador” de documentos JavaScript.</b></p>
+    <p>Node permite que JavaScript se pueda ejecutar desde el lado del servidor, ya que hasta entonces solo se podía
+        usar en los navegadores.</p>
+    <h2>1. Instalación de NodeJS</h2>
+    <p>Lo primero que necesitamos es tener instalado Node en nuestro equipo. Para ello, nos vamos a su página web y lo
+        instalamos: <a href="https://nodejs.org/en/">https://nodejs.org/en/</a></p>
+    <p>Después de reiniciar el equipo, comprobamos que se ha instalado correctamente con el siguiente comando:</p>
+    <div><img src="./img/1-node-version.png" alt="Node version"></div>
+    <h2>2. Primer proyecto con NodeJS</h2>
+    <p>Vamos a crear un proyecto muy sencillo que muestre Hola Mundo. Es importante que a medida que vayamos
+        desarrollando nuestro proyecto esté bien <b>modularizado</b>, para evitar que todo el código esté en un solo
+        archivo. Esto, además, nos permite que el mantenimiento del proyecto sea también más sencillo.</p>
+    <p>En este ejemplo creamos 2 archivos, uno será el principal (main.js) que llamará a otro fichero (impresion.js).
+        Esto se hace con el método <i>require</i>.</p>
+    <div><img src="./img/2-estructura.png" alt="Estructura del proyecto"></div>
+    <p>Por último, solo nos queda ejecutarlo desde la consola con el siguiente comando:</p>
+    <div><img src="./img/3-ejecutar.png" alt="Ejecutar el proyecto"></div>
+    <p>Las cosas más importantes a tener en cuenta sobre NodeJS son las siguientes:</p>
+    <ol>
+        <li><b>Gestor de paquetes NPM</b>: npm es un gestor de paquetes de Node.js con el que la comunidad pueden crear,
+            compartir y reutilizar módulos y pequeñas librerías. Los módulos se pueden instalar de manera local con el
+            comando <i><b>npm install 'nombre_paquete' --save</b></i>. También podemos instalarlo de manera global
+            añadiendo la
+            opción <i>-g</i>.
+        <li><b>Package.json</b>: Para inicializar nuestro proyecto, necesitamos ejecutar primero el comando <i><b>npm
+                    init</b></i>,
+            que crea automáticamente el archivo package.json, donde se definen las características principales y las
+            dependencias de nuestro proyecto con respecto a otras aplicaciones y librerías. Un ejemplo es el siguiente:
+        </li>
+        <div><img src="./img/4-ejemplo-package.png" alt="Ejemplo de package.json"></div>
+    </ol>
+</body>
+
+</html>

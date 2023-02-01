@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+}
+
+form {
+    width: 25%;
+    margin: 0 auto;
+}
+
+legend {
+    font-weight: bold;
+}
+
+.row {
+    margin-top: 0.5em;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+}
+
+button[type="submit"] {
+    padding: 0.5em;
+    cursor: pointer;
+}

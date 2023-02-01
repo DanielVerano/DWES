@@ -1,0 +1,47 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 1em;
+}
+
+.content {
+  width: 50%;
+}
+
+.row {
+  margin-top: 1em;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.row label {
+  float: left;
+  width: 25%;
+}
+
+.row input {
+  float: left;
+  width: 75%;
+}

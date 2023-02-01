@@ -1,0 +1,110 @@
+use('daniel2');
+
+// Alumnos
+db.alumnos.insertMany([
+    {lUni: 20200001, nombre: "José Ruiz Mateo", edad: 18, telefono: ["954444444", "600123456"]},
+    {lUni: 20200002, nombre: "Cristina Bolancé Jiménez", edad: 19, telefono: ["600234567"]},
+    {lUni: 20200003, nombre: "Felipe Díaz Perez", edad: 18, telefono: ["954354444", "601123456"]},
+    {lUni: 20200004, nombre: "Lucía García Jiménez", edad: 19, telefono: ["601234567"]},
+    {lUni: 20200005, nombre: "Juan Rivera Lopez", edad: 28, telefono: ["954554444", "602123456"]},
+    {lUni: 20200006, nombre: "Carlota García Mendez", edad: 21, telefono: ["602234567"]},
+    {lUni: 20200007, nombre: "Francisco López Perez", edad: 18, telefono: ["954354554", "602123456"]},
+    {lUni: 20200008, nombre: "Lidia Carrillo González", edad: 19, telefono: ["602234267"]}
+])
+
+// Profesores
+db.profesores.insertMany([
+    {dni: "11111111A", nombre: "Angelica Mora Nuñez", cargo: "tutor"},
+    {dni: "22222222B", nombre: "Antonio González Casado", cargo: "tutor"},
+    {dni: "33333333C", nombre: "José María García Durán", cargo: "profesor"},
+    {dni: "44444444D", nombre: "Carmen García Rufino", cargo: "profesor"}
+])
+
+// Cursos y profesores
+db.cursos.insertMany([
+    {nro: 11, curso: "DAW1 Mañana", profesores: ["44444444D"], alumnos: [20200001, 20200002, 20200003, 20200006, 20200007]},
+    {nro: 12, curso: "DAW1 Tarde", profesores: ["44444444D"], alumnos: [20200005, 20200008]},
+    {nro: 21, curso: "DAW2 Mañana", profesores: ["11111111A", "22222222B", "33333333C", "44444444D"]},
+    {nro: 22, curso: "DAW2 Tarde", profesores: ["11111111A", "22222222B", "33333333C", "44444444D"], alumnos: [20200002, 20200004, 20200006]}
+])
+
+// 1. Contabilizar la cantidad de profesores por cargo.
+
+db.profesores.aggregate([
+    { $group: {_id: "$cargo", cantidad: {$sum: 1}}}
+])
+
+// 2. Mostrar la media, mayor y menor edad de los alumnos por curso, ordenado por
+// curso.
+
+db.cursos.aggregate([
+    { $lookup: {
+      from: "alumnos",
+      localField: "alumnos",
+      foreignField: "lUni",
+      as: "alumno"
+    }},
+    { $unwind: "$alumno" },
+    { $group: { _id: "$nro", media: {$avg: "$alumno.edad"}, mayor: {$max: "$alumno.edad"}, menor: {$min: "$alumno.edad"}}},
+    { $sort: { "_id": 1}}
+])
+
+// 3. Mostrar los datos del alumno de mayor edad.
+
+db.alumnos.aggregate([
+    { $group: {_id: "$nombre", mayor: {$max: "$edad"}}},
+    { $sort: { mayor: -1}},
+    { $limit: 1}
+])
+
+// 4. Cursos que tengan al menos 2 alumnos entre 18 y 20 años (ambos inclusives).
+
+db.cursos.aggregate([
+    { $lookup: {
+      from: "alumnos",
+      localField: "alumnos",
+      foreignField: "lUni",
+      as: "alumno"
+    }},
+    { $unwind: "$alumno"},
+    { $group: {_id: "$nro", suma: {$sum: {$cond: [{"alumno.edad": {$gte:18}}, 1, 0]}}}}
+])
+
+// 5. Listar los nombres de los cursos y de los alumnos, ordenados por curso y nombre
+// del alumno.
+
+db.cursos.aggregate([
+    { $lookup: {
+      from: "alumnos",
+      localField: "alumnos",
+      foreignField: "lUni",
+      as: "alumno"
+    }},
+    { $sort: {nro:1, "alumno.nombre": 1}},
+    { $project: {_id:0, curso:1, "alumno.nombre": 1}}
+])
+
+// 6. Por curso listar nombres de los profesores y cargo, ordenados por curso y nombre
+// del profesor.
+
+db.cursos.aggregate([
+    { $lookup: {
+      from: "profesores",
+      localField: "profesores",
+      foreignField: "dni",
+      as: "profesor"
+    }},
+    { $sort: {nro: 1, "profesor.nombre": 1}},
+    { $project: {"profesor.nombre": 1, "profesor.cargo": 1}}
+])
+
+// Define los índices que consideréis necesarios para mejorar el rendimiento de la BD y
+// justifica razonadamente su creación.
+
+db.alumnos.createIndex({lUni: 1}, {unique: true})
+db.profesores.createIndex({dni: 1}, {unique: true})
+db.cursos.createIndex({nro: 1}, {unique: true})
+
+db.alumnos.createIndex({nombre: 1})
+
+db.alumnos.find({nombre: "José Ruiz Mateo"}).explain("executionStats")

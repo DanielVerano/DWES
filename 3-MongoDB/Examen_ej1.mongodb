@@ -1,0 +1,120 @@
+use('daniel1')
+
+
+db.libros.insertOne({
+titulo: "Secuestrado",
+descripcion: "Las aventuras de David Balfour",
+autor: "Robert Louis Stevenson",
+anioPublicacion: 2002,
+genero: ["acción"],
+paginas: 255,
+editorial: "Addison-Wesley",
+disponible: false,
+precio: 15.95
+})
+
+db.libros.insertMany([{
+titulo: "Secuestrada por el peligro",
+descripcion: "Traición, venganza y amor",
+autor: "Melissa Hall",
+anioPublicacion: 2017,
+genero: ["romántica", "acción"],
+paginas: 318,
+editorial: "Mozaika Publications",
+disponible: true,
+precio: 19.95
+},
+{
+titulo: "La trama",
+descripcion: "Enredo político",
+autor: "Carlos Alberto Montaner",
+anioPublicacion: 2000,
+genero: ["histórica"],
+paginas: 187,
+editorial: "Planeta",
+disponible: false,
+precio: 18.95
+},
+{
+titulo: "Historias de mujeres casadas",
+descripcion: "Amor, matrimonio, amantes y amistad",
+autor: "Cristina Campos",
+anioPublicacion: 2021,
+genero: ["romántica"],
+paginas: 464,
+editorial: "Planeta",
+disponible: true,
+precio: 25.95
+}])
+
+// 1. Busca todos los documentos que contengan en la descripción el valor 'amor',
+// muestra solo el título, descripción y autor.
+
+db.libros.find({descripcion: /amor/}, {_id:0, titulo:1, descripcion:1, autor:1})
+
+// 2. Busca todos los documentos que tengan más de 200 páginas y cueste menos de 20,
+// muestra el título, editorial, año de publicación y precio.
+
+db.libros.find({$and: [
+    {paginas: {$gt: 200}},
+    {precio: {$lt: 20}}
+]}, {_id:0, titulo:1, editorial:1, anioPublicacion:1, precio:1})
+
+// 3. Busca todos los documentos que tengan entre 200 y 400 páginas (ambos valores
+// incluidos) y estén disponibles.
+
+db.libros.find({$and: [
+    {$and: [{paginas: {$gte: 200}}, {paginas: {$lte: 400}}]},
+    {disponible: true}
+]})
+
+// 4. Busca todos los documentos que sean del género 'romántica' y 'acción', muestra
+// sólo el título, autor, precio y si está disponible.
+
+db.libros.find({genero: {$all: ["romántica", "acción"]}}, {_id:0, titulo:1, autor:1, precio:1, disponible:1})
+
+// 5. Busca todos los documentos que sean del género 'romántica' o 'acción' y esté
+// disponible, muestra sólo el título, autor y precio, ordenados por precio ascendente.
+
+db.libros.find({$and: [
+    {genero: {$in: ["romántica", "acción"]}},
+    {disponible: true}
+]}, {_id:0, titulo:1, autor:1, precio:1}).sort({precio:1})
+
+// 6. Obtén los libros editados en 1998 o en 2005, muestra sólo el título, autor y año de
+// publicación del libro más antiguo.
+
+db.libros.find({$or: [
+    {anioPublicacion: 1998},
+    {anioPublicacion: 2005}
+]}, {_id:0, titulo:1, autor:1, anioPublicacion:1}).sort({anioPublicacion:1}).limit(1)
+
+// 7. Obtén los libros editados desde 2001 y precio mayor que 25, muestra sólo el título,
+// año de publicación, precio y si está disponible, ordenados por año de publicación.
+
+db.libros.find({$and: [
+    {anioPublicacion: {$gt:2001}},
+    {precio: {$gt:25}}
+]}, {_id:0, titulo:1, anioPublicacion:1, precio:1, disponible:1}).sort({anioPublicacion:1})
+
+// 8. Obtén los libros publicados por la editorial Planeta desde el año 2000, que no estén
+// disponibles y ponlos disponibles.
+
+db.libros.updateMany({$and: [
+    {editorial: "Planeta"},
+    {anioPublicacion: {$gte: 2000}},
+    {disponible: false}
+]}, {$set: {disponible: true}})
+
+// 9. Obtén los libros publicados con posterioridad al 2002, incrementa su precio un 20%
+// y muestra el listado resultante con los datos título, autor y precio, ordenado de mayor
+// a menor precio.
+
+db.libros.updateMany({anioPublicacion: {$gt: 2002}}, {$mul: {precio: 1.2}})
+db.libros.find({}, {_id:0, titulo:1, autor:1, precio:1,}).sort({precio:-1})
+
+// 10. Recalifica los libros con género ‘acción’ por ‘aventuras’ y luego muestra el listado
+// resultante con los datos título, autor y género.
+
+db.libros.updateMany({genero: {$in: ["acción"]}}, {$set: {"genero.$": "aventuras"}})
+db.libros.find({}, {_id:0, titulo:1, autor:1, genero:1})

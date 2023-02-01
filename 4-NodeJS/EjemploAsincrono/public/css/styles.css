@@ -1,0 +1,31 @@
+* {
+    box-sizing: border-box;
+}
+
+form {
+    width: 20%;
+}
+
+div {
+    margin-top: 0.5em;
+}
+
+div:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+div label {
+    float: left;
+    width: 25%;
+}
+
+div input {
+    float: left;
+    width: 75%;
+}
+
+input:focus {
+    background-color: lightblue;
+}

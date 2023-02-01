@@ -1,0 +1,1 @@
+const impresion = require('./impresion');
